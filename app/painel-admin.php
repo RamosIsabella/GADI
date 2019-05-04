@@ -137,6 +137,8 @@
 				?>
 																				<li> <a class="waves-effect waves-dark" href="painel-admin.php" aria-expanded="false"><i class="mdi mdi-gauge"></i><span class="hide-menu">Dashboard</span></a></li>
 																				<li> <a class="waves-effect waves-dark" href="painel-admin.php?opcao=hub-configuracao" aria-expanded="false"><i class="mdi mdi-gauge"></i><span class="hide-menu">Hub de Conexão</span></a></li>
+																				<li> <a class="waves-effect waves-dark" href="painel-admin.php?opcao=webservice-configuracao" aria-expanded="false"><i class="mdi mdi-gauge"></i><span class="hide-menu">Web-Service-configuracao</span></a></li>
+																				
 																					<?php
 						} // Menu-Lateral - Fim Permissão: 1 - Admin
 				?>
@@ -251,16 +253,16 @@ function ajax_get(url, callback) {
     xmlhttp.send();
 }
 
-ajax_get('http://187.49.93.234:3344/printer/api/Printer3?apikey=8048370b-643f-4f0a-add2-12dd93d5ab12&a=stateList&data={}', function(data) {
+ajax_get('http://187.49.93.234:3344/printer/api/Printer?apikey=8048370b-643f-4f0a-add2-12dd93d5ab12&a=stateList&data={}', function(data) {
     //document.getElementById("title").innerHTML = data.Printer.activeExtruder;
-	document.getElementById("TempBico").innerHTML = data.Printer3.extruder[0].tempRead;
-	document.getElementById("TempBed").innerHTML = data.Printer3.heatedBeds[0].tempRead;
-	document.getElementById("AxisX").innerHTML = data.Printer3.x;
-	document.getElementById("AxisY").innerHTML = data.Printer3.y;
-	document.getElementById("AxisZ").innerHTML = data.Printer3.z;
-	document.getElementById("Sdcard").innerHTML = data.Printer3.sdcardMounted;
-	document.getElementById("Speed").innerHTML = data.Printer3.speedMultiply;
-	document.getElementById("QuanFilamento").innerHTML = data.Printer3.flowMultiply;
+	document.getElementById("TempBico").innerHTML = data.Printer.extruder[0].tempRead;
+	document.getElementById("TempBed").innerHTML = data.Printer.heatedBeds[0].tempRead;
+	document.getElementById("AxisX").innerHTML = data.Printer.x;
+	document.getElementById("AxisY").innerHTML = data.Printer.y;
+	document.getElementById("AxisZ").innerHTML = data.Printer.z;
+	document.getElementById("Sdcard").innerHTML = data.Printer.sdcardMounted;
+	document.getElementById("SpeedImpressao").innerHTML = data.Printer.speedMultiply;
+	document.getElementById("SpeedFilamento").innerHTML = data.Printer.flowMultiply;
 });
 
 
@@ -295,18 +297,59 @@ ajax_get('http://187.49.93.234:3344/printer/api/Printer3?apikey=8048370b-643f-4f
 					<div class="col-md-12" id="Sdcard"></div>
 				</div>
 			<h3 class="box-title" style="margin: 15px 10px">Velocidade</h3>
+				
 				<div class="form-group">
-					<label class="col-md-12">Cartão de Memória: </label>
-					<div class="col-md-12" id="speed"></div>
+					<label class="col-md-12">Velocidade de Impressão: </label>
+					<div class="col-md-12" id="SpeedImpressao"></div>
 				</div>
-			<h3 class="box-title" style="margin: 15px 10px">Alimentação</h3>
 				<div class="form-group">
 					<label class="col-md-12">Velocidade de Extrusão: </label>
-					<div class="col-md-12" id="QuanFilamento"></div>
+					<div class="col-md-12" id="SpeedFilamento"></div>
 				</div>
 	</div>
 <?php 
 	}
+?>
+
+	<?php
+		if (isset($_GET['opcao'])){ // Validar se foi passado o parâmetro.
+			$opcao = $_GET['opcao']; // Exemplo: webservice-configuracao
+			$id = $_GET['id']; // Editar o Id
+			
+			if($opcao == "webservice-configuracao"){
+	?>  
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+   $('#iframe').attr('src', 'http://187.49.93.234:3344/printer/info');
+});
+</script>
+
+	<div class="col-12">
+		<div class="card">
+		<h3 class="box-title" style="margin: 15px 10px">Conexão Externa</h3>
+			<iframe id="iframe" name="myIframe" frameborder="5" style="top: 0;left: 0;width: 100%;height: 100%;border: 0;"></iframe>
+			
+			<h3 class="box-title" style="margin: 15px 10px">URL para o Teste</h3>
+				<form method="POST" action="painel-admin.php?opcao=hub-configuracao" class="form-horizontal form-material">
+					<div class="form-group">
+						<div class="col-md-12">
+							<input type="text" name="nome" value="http://187.49.93.234:3344/printer/info" class="form-control form-control-line">
+						</div>
+					</div>
+					<div class="row text-center justify-content-md-center" style="margin: 15px 10px">
+						<div class="col-4">
+							<input type="submit" value="Testar" class="btn btn-success" name="testar">
+						</div>
+
+					</div>
+				</form>
+		</div>
+	</div>
+<?php
+	} //Fim webservice-configuracao
+}// Fim id parâmetro
 ?>
 	</div>
 </div>
@@ -317,60 +360,60 @@ ajax_get('http://187.49.93.234:3344/printer/api/Printer3?apikey=8048370b-643f-4f
 		}
 	?>
 
-																																				</div>
-																																				<!-- Row -->
+</div>
+				<!-- Row -->
 
-																																				<!-- ============================================================== -->
-																																				<!-- End PAge Content -->
-																																				<!-- ============================================================== -->
-																																			</div>
-																																			<!-- ============================================================== -->
-																																			<!-- End Container fluid  -->
-																																			<!-- ============================================================== -->
-																																			<!-- ============================================================== -->
-																																			<!-- footer -->
-																																			<!-- ============================================================== -->
-																																			<footer class="footer"> 2019 &copy; Gerenciador de Vendas </footer>
-																																			<!-- ============================================================== -->
-																																			<!-- End footer -->
-																																			<!-- ============================================================== -->
-																																		</div>
-																																		<!-- ============================================================== -->
-																																		<!-- End Page wrapper  -->
-																																		<!-- ============================================================== -->
-																																	</div>
-																																	<!-- ============================================================== -->
-																																	<!-- End Wrapper -->
-																																	<!-- ============================================================== -->
-																																	<!-- ============================================================== -->
-																																	<!-- All Jquery -->
-																																	<!-- ============================================================== -->
-																																	<script src="plugins/jquery/jquery.min.js"></script>
-																																	<!-- Bootstrap tether Core JavaScript -->
-																																	<script src="plugins/bootstrap/js/tether.min.js"></script>
-																																	<script src="plugins/bootstrap/js/bootstrap.min.js"></script>
-																																	<!-- slimscrollbar scrollbar JavaScript -->
-																																	<script src="js/jquery.slimscroll.js"></script>
-																																	<!--Wave Effects -->
-																																	<script src="js/waves.js"></script>
-																																	<!--Menu sidebar -->
-																																	<script src="js/sidebarmenu.js"></script>
-																																	<!--stickey kit -->
-																																	<script src="plugins/sticky-kit-master/dist/sticky-kit.min.js"></script>
-																																	<!--Custom JavaScript -->
-																																	<script src="js/custom.min.js"></script>
-																																	<!-- ============================================================== -->
-																																	<!-- This page plugins -->
-																																	<!-- ============================================================== -->
-																																	<!-- chartist chart -->
-																																	<script src="plugins/chartist-js/dist/chartist.min.js"></script>
-																																	<script src="plugins/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.min.js"></script>
-																																	<!--c3 JavaScript -->
-																																	<script src="plugins/d3/d3.min.js"></script>
-																																	<script src="plugins/c3-master/c3.min.js"></script>
-																																	<!-- Chart JS -->
-																																	<script src="js/dashboard1.js"></script>
-																																</body>
+				<!-- ============================================================== -->
+				<!-- End PAge Content -->
+				<!-- ============================================================== -->
+			</div>
+			<!-- ============================================================== -->
+			<!-- End Container fluid  -->
+			<!-- ============================================================== -->
+			<!-- ============================================================== -->
+			<!-- footer -->
+			<!-- ============================================================== -->
+			<footer class="footer"> 2019 &copy; G.A.D.I. </footer>
+			<!-- ============================================================== -->
+			<!-- End footer -->
+			<!-- ============================================================== -->
+		</div>
+		<!-- ============================================================== -->
+		<!-- End Page wrapper  -->
+		<!-- ============================================================== -->
+	</div>
+	<!-- ============================================================== -->
+	<!-- End Wrapper -->
+	<!-- ============================================================== -->
+	<!-- ============================================================== -->
+	<!-- All Jquery -->
+	<!-- ============================================================== -->
+	<script src="plugins/jquery/jquery.min.js"></script>
+	<!-- Bootstrap tether Core JavaScript -->
+	<script src="plugins/bootstrap/js/tether.min.js"></script>
+	<script src="plugins/bootstrap/js/bootstrap.min.js"></script>
+	<!-- slimscrollbar scrollbar JavaScript -->
+	<script src="js/jquery.slimscroll.js"></script>
+	<!--Wave Effects -->
+	<script src="js/waves.js"></script>
+	<!--Menu sidebar -->
+	<script src="js/sidebarmenu.js"></script>
+	<!--stickey kit -->
+	<script src="plugins/sticky-kit-master/dist/sticky-kit.min.js"></script>
+	<!--Custom JavaScript -->
+	<script src="js/custom.min.js"></script>
+	<!-- ============================================================== -->
+	<!-- This page plugins -->
+	<!-- ============================================================== -->
+	<!-- chartist chart -->
+	<script src="plugins/chartist-js/dist/chartist.min.js"></script>
+	<script src="plugins/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.min.js"></script>
+	<!--c3 JavaScript -->
+	<script src="plugins/d3/d3.min.js"></script>
+	<script src="plugins/c3-master/c3.min.js"></script>
+	<!-- Chart JS -->
+	<script src="js/dashboard1.js"></script>
+</body>
 
-																															</html>
+</html>
 																															
